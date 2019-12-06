@@ -42,7 +42,7 @@ class MainWindow(QMainWindow):
     def keyPressEvent(self, e):
         if e.key() == 16777264: # F1 키로 호출
             self.serch_win = search_window()
-            print('aa')
+
 
 class search_window(QMainWindow):
     def __init__(self):
@@ -72,6 +72,9 @@ class search_window(QMainWindow):
         self.search_result_box.cellChanged.connect(self.db_update_due_to_changed_val)
         self.search_result_box.setColumnCount(3)
         self.search_result_box.setHorizontalHeaderLabels(["DB_row", "K", "E"])
+        self.search_result_box.setColumnWidth(0, 50)
+        # self.search_result_box.setColumnWidth(1, 450)
+        # self.search_result_box.setColumnWidth(2, 450)
         self.show()
 
     def db_update_due_to_changed_val(self):
@@ -79,22 +82,24 @@ class search_window(QMainWindow):
         selected_cell = self.search_result_box.currentIndex()
         if selected_cell.column() != -1:
             # 업데이트된 변수 찾기
-            get_changed_db_index = self.search_result_box.item(selected_cell.row(), 0).text()  # get DB_row
-            get_changed_db_k = self.search_result_box.item(selected_cell.row(), 1).text() # get DB_row
-            get_changed_db_e = self.search_result_box.item(selected_cell.row(), 2).text()  # get DB_row
+            get_changed_db_index = self.search_result_box.item(selected_cell.row(), 0).text()   # get DB_row
+            get_changed_db_k = self.search_result_box.item(selected_cell.row(), 1).text()       # get DB_row
+            get_changed_db_e = self.search_result_box.item(selected_cell.row(), 2).text()       # get DB_row
             # db 업데이트
             self.db.loc[int(get_changed_db_index)] = [str(get_changed_db_k), str(get_changed_db_e)]
             # 저장하려면 F3 누르기
 
     def update_table_from_search_input(self):
         # 현재 서치 박스의 text 기반으로 업데이트
+        self.search_result_box.clear()
+        self.search_result_box.setHorizontalHeaderLabels(["DB_row", "K", "E"])
         search_txt = self.search_input_box.text()
         if search_txt != '':
-            print(f'Search {search_txt}')
+            # print(f'Search {search_txt}')                 # db 업데이트 확인용
             # table update
             get_searched_db = self.search_in_DB(search_txt)
-            print(get_searched_db)
-            print(len(get_searched_db))
+            # print(get_searched_db)                        # db 업데이트 확인용
+            # print(len(get_searched_db))                   # db 업데이트 확인용
 
             self.search_result_box.setRowCount(len(get_searched_db))    # 데이터가 몇개가 존재하는지 테이블 row 선정
 
@@ -151,11 +156,11 @@ class search_window(QMainWindow):
 
     def keyPressEvent(self, e):
         print(e.key())
-        if e.key() == 16777265: # F2 키로 내용 서치
+        if e.key() == 16777220: # 엔터 키로 내용 서치
             self.update_table_from_search_input()
         elif e.key() == 16777266: # F3 키으로 변경된 내용 저장
             # db 저장하기
-            self.db.to_pickle('db.pkl')
+            self.save_all_file()
         elif e.key() == 16777267: # F4 키로 새로운 열 생성
             # 열생성
             self.make_db()
