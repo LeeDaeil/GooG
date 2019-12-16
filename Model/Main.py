@@ -101,7 +101,7 @@ class search_window(QMainWindow):
     def update_table_from_search_input(self):
         # 현재 서치 박스의 text 기반으로 업데이트
         self.search_result_box.clear()
-        self.search_result_box.setHorizontalHeaderLabels(["DB_row", "K", "E"])
+        self.search_result_box.setHorizontalHeaderLabels(["DB_row", "Korea", "English"])
         search_txt = self.search_input_box.text()
         if search_txt != '':
             # print(f'Search {search_txt}')                 # db 업데이트 확인용
@@ -134,6 +134,7 @@ class search_window(QMainWindow):
             mg.exec_()
             self.search_result_box.clear()          # 데이터 지우고
             self.search_result_box.setRowCount(0)   # 표 row 0 으로 초기화
+            self.search_result_box.setHorizontalHeaderLabels(["DB_row", "Korea", "English"])
         # 자동 줄 바꿈
         self.search_result_box.resizeRowsToContents()
 
