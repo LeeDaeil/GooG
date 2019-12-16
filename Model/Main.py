@@ -77,7 +77,7 @@ class search_window(QMainWindow):
         self.search_result_box.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)    # 1개 선택 가능
         self.search_result_box.cellChanged.connect(self.db_update_due_to_changed_val)
         self.search_result_box.setColumnCount(3)
-        self.search_result_box.setHorizontalHeaderLabels(["DB_row", "K", "E"])
+        self.search_result_box.setHorizontalHeaderLabels(["DB_row", "Korea", "English"])
 
         # Tabel 열 너비
         self.search_result_box.setColumnWidth(0, 50)
@@ -160,8 +160,8 @@ class search_window(QMainWindow):
         self.search_result_box.setItem(max_row, 2, item_e)
         # Tabel 열 너비
         self.search_result_box.setColumnWidth(0, 50)
-        self.search_result_box.setColumnWidth(1, (self.box_w - 50) / 2 - 10)
-        self.search_result_box.setColumnWidth(2, (self.box_w - 50) / 2 - 10)
+        self.search_result_box.setColumnWidth(1, (self.search_result_box.geometry().width() - 50) / 2 - 10)
+        self.search_result_box.setColumnWidth(2, (self.search_result_box.geometry().width() - 50) / 2 - 10)
 
     def save_all_file(self):
         # 빈 변수 지우기
