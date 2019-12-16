@@ -1,5 +1,5 @@
 import sys
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PySide2.QtGui import QGuiApplication
 from PySide2 import QtWidgets
 from PySide2 import QtCore, QtWebEngineWidgets
@@ -11,7 +11,8 @@ import re
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.resize(1000, 500)
+        self.resize(800, 500)
+        self.setWindowTitle('댈번역기, F1:데이터베이스')
         self.Read_contents = QtWidgets.QPlainTextEdit(self)
 
         self.Read_contents.setGeometry(QtCore.QRect(5, 5, 990, 20))
@@ -47,7 +48,8 @@ class MainWindow(QMainWindow):
 class search_window(QMainWindow):
     def __init__(self):
         super(search_window, self).__init__()
-        self.resize(1000, 300)
+        self.resize(600, 300)
+        self.setWindowTitle('엔터:서치, F3:저장, F4:새로운열생성')
         # 파일 존재 여부 체크 없음 새로 만들기
         # db col = {'K': '', 'E': ''}
         try:
@@ -63,18 +65,25 @@ class search_window(QMainWindow):
         # ------------------------------------
 
         self.search_input_box = QtWidgets.QLineEdit(self)  # 1단 Search input box
-        self.search_input_box.setGeometry(QtCore.QRect(5, 5, 990, 30))
-
+        self.search_input_box.setGeometry(QtCore.QRect(5, 5, self.geometry().width() - 10, 30))
+        
+        # Tabel
         self.search_result_box = QtWidgets.QTableWidget(self)
-        self.search_result_box.setGeometry(QtCore.QRect(5, 40, 990, 100))
+        self.search_result_box.setWordWrap(True)    # 자동으로 줄 바꿈
+        self.search_result_box.resizeRowsToContents()
+        self.search_result_box.setGeometry(QtCore.QRect(5, 40, self.geometry().width() - 10,
+                                                        self.geometry().height() - 50))
         self.search_result_box.setAlternatingRowColors(True)
         self.search_result_box.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)    # 1개 선택 가능
         self.search_result_box.cellChanged.connect(self.db_update_due_to_changed_val)
         self.search_result_box.setColumnCount(3)
         self.search_result_box.setHorizontalHeaderLabels(["DB_row", "K", "E"])
+
+        # Tabel 열 너비
         self.search_result_box.setColumnWidth(0, 50)
-        # self.search_result_box.setColumnWidth(1, 450)
-        # self.search_result_box.setColumnWidth(2, 450)
+        self.search_result_box.setColumnWidth(1, (self.search_result_box.geometry().width() - 50) / 2 - 10)
+        self.search_result_box.setColumnWidth(2, (self.search_result_box.geometry().width() - 50) / 2 - 10)
+        
         self.show()
 
     def db_update_due_to_changed_val(self):
@@ -121,8 +130,12 @@ class search_window(QMainWindow):
 
         else:
             print('No Search Value')
+            mg = QMessageBox(text='No Search Value')
+            mg.exec_()
             self.search_result_box.clear()          # 데이터 지우고
             self.search_result_box.setRowCount(0)   # 표 row 0 으로 초기화
+        # 자동 줄 바꿈
+        self.search_result_box.resizeRowsToContents()
 
     def search_in_DB(self, search_val):
         # db에서 찾고 싶은 파라메터를 추출해서 반환
@@ -145,6 +158,10 @@ class search_window(QMainWindow):
         self.search_result_box.setItem(max_row, 0, item_row)
         self.search_result_box.setItem(max_row, 1, item_k)
         self.search_result_box.setItem(max_row, 2, item_e)
+        # Tabel 열 너비
+        self.search_result_box.setColumnWidth(0, 50)
+        self.search_result_box.setColumnWidth(1, (self.box_w - 50) / 2 - 10)
+        self.search_result_box.setColumnWidth(2, (self.box_w - 50) / 2 - 10)
 
     def save_all_file(self):
         # 빈 변수 지우기
@@ -165,6 +182,15 @@ class search_window(QMainWindow):
             # 열생성
             self.make_db()
 
+    def resizeEvent(self, e):
+        self.search_input_box.setGeometry(QtCore.QRect(5, 5, self.geometry().width()-10, 30))
+        self.search_result_box.setGeometry(QtCore.QRect(5, 40, self.geometry().width()-10, self.geometry().height()-50))
+        # Tabel 열 너비
+        self.search_result_box.setColumnWidth(0, 50)
+        self.search_result_box.setColumnWidth(1, (self.search_result_box.geometry().width()-50)/2-10)
+        self.search_result_box.setColumnWidth(2, (self.search_result_box.geometry().width()-50)/2-10)
+        # 자동 줄 바꿈
+        self.search_result_box.resizeRowsToContents()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

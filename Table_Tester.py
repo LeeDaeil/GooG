@@ -14,9 +14,12 @@ class MyGui(QMainWindow):
 
     def showTable(self):
         self.table = QTableWidget(3, 3)
+        # 자동 줄바꿈
+        self.table.setWordWrap(True)
+
         self.table.setColumnCount(3)
         self.table.setColumnWidth(0, 20)                   # 각 컬럼의 크기를 정함
-        self.table.setColumnWidth(1, 150)                   # 각 컬럼의 크기를 정함
+        self.table.setColumnWidth(1, 50)                   # 각 컬럼의 크기를 정함
         self.table.setHorizontalHeaderLabels(["Make", "Model", "Price"])
         # 숫자
         self.table.setItem(0, 0, QTableWidgetItem('1'))
@@ -50,13 +53,12 @@ class MyGui(QMainWindow):
         self.table.cellClicked.connect(self.call_test_print)
         #
         self.setCentralWidget(self.table)
-
-    # @SLOT(QTableWidgetItem)
-    # def on_tableWidget_itemChanged(self, item):
-    #     print(item)
+        #
 
     def call_test_print(self):
         print(self.table.item(0, 0))
+        print(self.table.viewportSizeHint())
+        get_cell_1 = self.table.item(0, 0)
 
     def initMenu(self):
         # 메뉴를 추가하는 Function
@@ -75,9 +77,7 @@ class MyGui(QMainWindow):
         print('Test open file')
 
 
-
 if __name__ == '__main__':
-
     app = QApplication(sys.argv)
     mygui = MyGui()
     sys.exit(app.exec_())
