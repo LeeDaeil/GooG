@@ -165,6 +165,7 @@ class search_window(QMainWindow):
             # 열생성
             self.make_db()
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
