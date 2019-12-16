@@ -139,7 +139,7 @@ class search_window(QMainWindow):
 
     def search_in_DB(self, search_val):
         # db에서 찾고 싶은 파라메터를 추출해서 반환
-        print(self.db)
+        # print(self.db)
         hanCount = len(re.findall(u'[\u3130-\u318F\uAC00-\uD7A3]+', search_val))
         if hanCount > 0:
             return self.db[self.db.K.str.contains(search_val)]
@@ -149,7 +149,7 @@ class search_window(QMainWindow):
     def make_db(self):
         max_row = self.search_result_box.rowCount()
         self.search_result_box.setRowCount(max_row + 1)  # 데이터가 몇개가 존재하는지 테이블 row 선정
-        print(max_row)
+        # print(max_row)
         item_row = QtWidgets.QTableWidgetItem()
         item_row.setText(str(len(self.db)))
         item_row.setFlags(QtCore.Qt.ItemIsEnabled)
@@ -172,7 +172,7 @@ class search_window(QMainWindow):
         self.db.to_pickle('db.pkl')
 
     def keyPressEvent(self, e):
-        print(e.key())
+        # print(e.key())
         if e.key() == 16777220: # 엔터 키로 내용 서치
             self.update_table_from_search_input()
         elif e.key() == 16777266: # F3 키으로 변경된 내용 저장
