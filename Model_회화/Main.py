@@ -49,7 +49,7 @@ class search_window(QMainWindow):
     def __init__(self):
         super(search_window, self).__init__()
         self.resize(600, 300)
-        self.setWindowTitle('엔터:서치, F3:저장, F4:새로운열생성')
+        self.setWindowTitle('엔터:서치, F3:저장, F4:새로운열생성, F5:모든데이터보기')
         # 파일 존재 여부 체크 없음 새로 만들기
         # db col = {'K': '', 'E': ''}
         try:
